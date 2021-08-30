@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/build/devel/setup.sh

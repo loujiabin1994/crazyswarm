@@ -1,0 +1,8 @@
+prefix=/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/build/devel
+
+Name: libmotioncapture
+Description: Description of libmotioncapture
+Version: 0.0.1
+Cflags: -I/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include
+Libs: -L${prefix}/lib -llibmotioncapture
+Requires: 

@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../externalDependencies/qualisys_cpp_sdk/Network.h
+winsock2.h
+-
+
+../externalDependencies/qualisys_cpp_sdk/RTPacket.h
+stdio.h
+-
+stdint.h
+-
+
+../externalDependencies/qualisys_cpp_sdk/RTProtocol.h
+RTPacket.h
+../externalDependencies/qualisys_cpp_sdk/RTPacket.h
+Network.h
+../externalDependencies/qualisys_cpp_sdk/Network.h
+vector
+-
+string
+-
+map
+-
+
+/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/externalDependencies/qualisys_cpp_sdk/RigidBodyStreaming/RigidBodyStreaming.cpp
+RTProtocol.h
+/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/externalDependencies/qualisys_cpp_sdk/RigidBodyStreaming/RTProtocol.h
+RTPacket.h
+/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/externalDependencies/qualisys_cpp_sdk/RigidBodyStreaming/RTPacket.h
+unistd.h
+-
+
