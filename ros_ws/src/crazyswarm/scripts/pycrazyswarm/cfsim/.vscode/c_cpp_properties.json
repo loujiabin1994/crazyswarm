@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/ljb/crazyswarm/ros_ws/devel/include/**",
+        "/home/ljb/ego-planner-swarm/devel/include/**",
+        "/home/ljb/tmp_workspace/devel/include/**",
+        "/home/ljb/crazyfile_ws/devel/include/**",
+        "/home/ljb/ego-planner/devel/include/**",
+        "/home/ljb/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/bspline_opt/include/**",
+        "/home/ljb/crazyswarm/ros_ws/src/crazyflie_ros/crazyflie_cpp/include/**",
+        "/home/ljb/crazyfile_ws/src/create2_ros/create2_cpp/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/drone_detect/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/plan_manage/include/**",
+        "/home/ljb/catkin_ws/src/evoluationary_programmer/include/**",
+        "/home/ljb/catkin_ws/src/iq_gnc/include/**",
+        "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include/**",
+        "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libobjecttracker/include/**",
+        "/home/ljb/crazyfile_ws/src/mav_comm/mav_msgs/include/**",
+        "/home/ljb/crazyfile_ws/src/mav_comm/mav_planning_msgs/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/mockamap/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/Utils/multi_map_server/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/path_searching/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/plan_env/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/Utils/pose_utils/include/**",
+        "/home/ljb/catkin_ws/src/px4_test/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/Utils/quadrotor_msgs/include/**",
+        "/home/ljb/catkin_ws/src/realsense_gazebo_plugin/include/**",
+        "/home/ljb/crazyfile_ws/src/CrazyS/rotors_control/include/**",
+        "/home/ljb/crazyfile_ws/src/CrazyS/rotors_gazebo/include/**",
+        "/home/ljb/crazyfile_ws/src/CrazyS/rotors_gazebo_plugins/include/**",
+        "/home/ljb/crazyfile_ws/src/CrazyS/rotors_joy_interface/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/so3_control/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/so3_quadrotor_simulator/include/**",
+        "/home/ljb/ego-planner-swarm/src/planner/traj_utils/include/**",
+        "/home/ljb/ego-planner-swarm/src/uav_simulator/Utils/uav_utils/include/**",
+        "/home/ljb/crazyfile_ws/src/vrpn_client_ros/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
