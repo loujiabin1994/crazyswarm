@@ -2,7 +2,7 @@ from pycrazyswarm import *
 import airsim
 import rospy
 from tf import TransformListener
-# import tf
+import tf
 import geometry_msgs.msg
 import numpy as np
 from scipy.spatial import distance
@@ -11,7 +11,7 @@ from sensor_msgs.msg import PointCloud2, PointField
 import pcl
 from pcl import pcl_visualization
 from std_msgs.msg import Header
-
+import threading
 
 class Console:
     def __init__(self, sim_ip='', sim_port=41451, crazyflies_yaml=None):
@@ -22,9 +22,12 @@ class Console:
             sim_port: port of airsim server
             crazyflies_yaml: information of crazyflie swarm.
         """
-        self.real_server=Crazyswarm(crazyflies_yaml)
+        self.real_server = Crazyswarm(crazyflies_yaml)
         self.sim_server = airsim.client.MultirotorClient(sim_ip, sim_port)
         self.sim_list = self.sim_server.listVehicles()
+        self.real_list = []
+        for each in  self.real_server.allcfs.crazyflies:
+            self.real_list.append('cf' + str(each.id))
         self.init_position = {}
         self.tf = TransformListener()
         for each in self.sim_list:
@@ -33,9 +36,22 @@ class Console:
                            [1, 0, 0],
                            [0, 0, -1]])
         self.p = np.array([])
-        #rospy.init_node('console')
+        # rospy.init_node('console')
         self.pub_pcl = rospy.Publisher("sim_pc", PointCloud2, queue_size=1)
-        # listener = tf.TransformListener()
+        self.listener = tf.TransformListener()
+        init_pos = airsim.Pose(airsim.Vector3r(x_val=0, y_val=0, z_val=-0),
+                               airsim.Quaternionr(x_val=0, y_val=0, z_val=0, w_val=1))
+        rate = rospy.Rate(10)
+        rate.sleep()
+        for each in self.real_list:
+            (trans, rot) = self.listener.lookupTransform("world", each, rospy.Time(0))
+            pos = airsim.Pose(airsim.Vector3r(x_val=trans[1], y_val=trans[0], z_val=-trans[2]),
+                               airsim.Quaternionr(x_val=rot[0], y_val=rot[1], z_val=rot[2], w_val=rot[3]))
+            self.sim_server.simAddVehicle(each, "simpleflight", init_pos)
+            self.sim_server.simSetVehiclePose(pos, True, each)
+        # self.thread_ca = threading.Thread(target=self.tf_listenner, args=())
+        # self.thread_ca.start()
+
         # rate = rospy.Rate(60.0)
         # while not rospy.is_shutdown():
         #     # (trans, rot) = listener.lookupTransform('world', 'cf10', rospy.Time(0))
@@ -51,9 +67,18 @@ class Console:
         return np.dot(self.r, position)
 
     def tf_listenner(self):
+        rate = rospy.Rate(60.0)
+        while not rospy.is_shutdown():
+            for each in self.real_list:
+                try:
+                    (trans, rot) = self.listener.lookupTransform('world', each, rospy.Time(0))
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    continue
+                pos = airsim.Pose(airsim.Vector3r(x_val=trans[1], y_val=trans[0], z_val=-trans[2] - 0.005),
+                                  airsim.Quaternionr(x_val=rot[0], y_val=rot[1], z_val=rot[2], w_val=rot[3]))
+                self.sim_server.simSetVehiclePose(pos, True, each)
+            rate.sleep()
 
-        return
-        # TODO
 
     def position(self, drone_id):
         """
@@ -196,10 +221,7 @@ class Console:
                 #    c.join()
         else:
             if individual < 100:
-                for each in self.real_server.allcfs:
-                    if each.id == individual:
-                        each.goTo(goal, yaw, duration, relative)
-                        break
+                self.real_server.allcfs.crazyfliesById[individual].goTo(goal, yaw, duration, relative)
             else:
                 if relative is True:
                     goal += self.position(individual)[0]

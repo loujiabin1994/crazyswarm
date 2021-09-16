@@ -38,23 +38,43 @@ def load_waypoint(filepath):
     return waypoints
 
 
+def tf_listenner(console):
+    rate = rospy.Rate(60.0)
+    while not rospy.is_shutdown():
+        for each in console.real_list:
+            try:
+                (trans, rot) = console.listener.lookupTransform('world', each, rospy.Time(0))
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                continue
+            pos = airsim.Pose(airsim.Vector3r(x_val=trans[1], y_val=trans[0], z_val=-trans[2] - 0.005),
+                              airsim.Quaternionr(x_val=rot[0], y_val=rot[1], z_val=rot[2], w_val=rot[3]))
+            console.sim_server.simSetVehiclePose(pos, True, each)
+        rate.sleep()
+
+
 if __name__ == "__main__":
-    #waypoints = load_waypoint('waypoints6.csv')
+    waypoints = load_waypoint('waypoint6.csv')
     con = Console(sim_ip='192.168.0.102')
     timeHelper = con.real_server.timeHelper
-    con.takeoff(duration=4.0, group=2, height=1.0)
+    # t1 = threading.Thread(target=tf_listenner, args=[con])
+    # t1.start()
+    con.takeoff(duration=4.0, group=0, height=1.0)
     while 1:
         lastTime = 0.0
         queue_goto = []
+
         for waypoint in waypoints:
+            if waypoint.arrival - lastTime > 0:
+                for c in queue_goto:
+                    c.join()
+                queue_goto = []
+                # timeHelper.sleep(waypoint.arrival - lastTime)
+                lastTime = waypoint.arrival
             if waypoint.arrival == lastTime:
                 pos = np.array([waypoint.x, waypoint.y, waypoint.z])
                 if waypoint.agent > 100:
                     queue_goto.append(con.goTo(pos, 3.0, 0, individual=waypoint.agent, relative=False))
-            elif waypoint.arrival - lastTime > 0:
-                for c in queue_goto:
-                    c.join()
-                queue_goto = []
-                #timeHelper.sleep(waypoint.arrival - lastTime)
-                lastTime = waypoint.arrival
+                else:
+                    con.goTo(pos, 3.0, 0, individual=waypoint.agent, relative=False)
+
             #waypoint.arrival = waypoint.arrival + 5.0
