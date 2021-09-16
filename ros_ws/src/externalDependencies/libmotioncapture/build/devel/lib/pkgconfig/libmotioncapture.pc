@@ -3,6 +3,6 @@ prefix=/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/bui
 Name: libmotioncapture
 Description: Description of libmotioncapture
 Version: 0.0.1
-Cflags: -I/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include
-Libs: -L${prefix}/lib -llibmotioncapture
+Cflags: -I/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include -I/opt/ros/noetic/include
+Libs: -L${prefix}/lib -llibmotioncapture /opt/ros/noetic/lib/libvrpn.a /opt/ros/noetic/lib/libquat.a -lm -lpthread
 Requires: 

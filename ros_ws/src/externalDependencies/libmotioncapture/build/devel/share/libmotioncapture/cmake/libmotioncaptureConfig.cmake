@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(libmotioncapture_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include " STREQUAL " ")
+if(NOT "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include;/opt/ros/noetic/include " STREQUAL " ")
   set(libmotioncapture_INCLUDE_DIRS "")
-  set(_include_dirs "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include")
+  set(_include_dirs "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/include;/opt/ros/noetic/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -116,7 +116,7 @@ if(NOT "/home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/in
   endforeach()
 endif()
 
-set(libraries "libmotioncapture")
+set(libraries "libmotioncapture;/opt/ros/noetic/lib/libvrpn.a;/opt/ros/noetic/lib/libquat.a;m;-lpthread")
 foreach(library ${libraries})
   # keep build configuration keywords, target names and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/build/devel/lib;/home/ljb/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/ljb/crazyswarm/ros_ws/src/externalDependencies/libmotioncapture/build/devel/lib;/home/ljb/crazyswarm/ros_ws/devel/lib;/home/ljb/ego-planner-swarm/devel/lib;/home/ljb/tmp_workspace/devel/lib;/home/ljb/crazyfile_ws/devel/lib;/home/ljb/ego-planner/devel/lib;/home/ljb/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

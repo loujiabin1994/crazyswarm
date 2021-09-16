@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "../../devel/lib/libmotioncapture/RigidBodyStreaming"
-  "../../devel/lib/libmotioncapture/RigidBodyStreaming.pdb"
   "CMakeFiles/RigidBodyStreaming.dir/RigidBodyStreaming/RigidBodyStreaming.cpp.o"
+  "../../devel/lib/libmotioncapture/RigidBodyStreaming.pdb"
+  "../../devel/lib/libmotioncapture/RigidBodyStreaming"
 )
 
 # Per-language clean rules from dependency scanning.

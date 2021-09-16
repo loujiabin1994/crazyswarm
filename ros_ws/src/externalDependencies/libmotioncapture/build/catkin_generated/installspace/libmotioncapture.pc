@@ -3,6 +3,6 @@ prefix=/usr/local
 Name: libmotioncapture
 Description: Description of libmotioncapture
 Version: 0.0.1
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -llibmotioncapture
+Cflags: -I${prefix}/include -I/opt/ros/noetic/include
+Libs: -L${prefix}/lib -llibmotioncapture /opt/ros/noetic/lib/libvrpn.a /opt/ros/noetic/lib/libquat.a -lm -lpthread
 Requires: 

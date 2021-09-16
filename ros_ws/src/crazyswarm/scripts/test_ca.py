@@ -54,11 +54,9 @@ def obstacle_avoidance(cfs, tello, radii):
 
 if __name__ == "__main__":
     waypoints = load_waypoint("waypoints6.csv")
-
     swarm = Crazyswarm()
     timeHelper = swarm.timeHelper
     allcfs = swarm.allcfs
-    
     cf6 = allcfs.crazyfliesById[7]
     cf6.setLEDColor(1,0.5,0.5)
 

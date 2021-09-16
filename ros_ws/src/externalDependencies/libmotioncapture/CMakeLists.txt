@@ -3,7 +3,7 @@ project(libmotioncapture)
 
 find_package(catkin  REQUIRED)
 find_package(VRPN  REQUIRED)
-
+message("dic is" ${VRPN_INCLUDE_DIR})
 
 
 set(ENABLE_QUALISYS True CACHE STRING "Enable Qualisys")

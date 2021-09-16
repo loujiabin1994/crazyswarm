@@ -1,12 +1,12 @@
 from pycrazyswarm import *
 import airsim
 import rospy
-# from tf import TransformListener
+from tf import TransformListener
 # import tf
 import geometry_msgs.msg
 import numpy as np
 from scipy.spatial import distance
-from pyquaternion import Quaternion
+#from pyquaternion import Quaternion
 from sensor_msgs.msg import PointCloud2, PointField
 import pcl
 from pcl import pcl_visualization
@@ -22,18 +22,18 @@ class Console:
             sim_port: port of airsim server
             crazyflies_yaml: information of crazyflie swarm.
         """
-        # self.real_server=Crazyswarm(crazyflies_yaml)
+        self.real_server=Crazyswarm(crazyflies_yaml)
         self.sim_server = airsim.client.MultirotorClient(sim_ip, sim_port)
-        self.sim_list = ['cf101', 'cf102', 'cf103', 'cf104', 'cf105']
+        self.sim_list = self.sim_server.listVehicles()
         self.init_position = {}
+        self.tf = TransformListener()
         for each in self.sim_list:
             self.init_position[each] = self.position(each)
         self.r = np.array([[0, 1, 0],
                            [1, 0, 0],
                            [0, 0, -1]])
         self.p = np.array([])
-        rospy.init_node('console')
-        self.tf = TransformListener()
+        #rospy.init_node('console')
         self.pub_pcl = rospy.Publisher("sim_pc", PointCloud2, queue_size=1)
         # listener = tf.TransformListener()
         # rate = rospy.Rate(60.0)
@@ -105,7 +105,7 @@ class Console:
                 # Airsim
                 commandque = []
                 for drone in self.sim_list:
-                    commandque.append(self.sim_server.moveToZAsync(-height, height / duration, vehicle_name=drone))
+                    commandque.append(self.sim_server.moveToZAsync(-height - 0.47507424, height / duration, vehicle_name=drone))
                 for c in commandque:
                     c.join()
 
@@ -117,7 +117,7 @@ class Console:
                         break
             else:
                 # self.sim_server.takeoffAsync(timeout_sec=duration, vehicle_name='cf' + str(individual))
-                self.sim_server.moveToZAsync(-height, height / duration, vehicle_name='cf' + str(individual)).join()
+                self.sim_server.moveToZAsync(-height - 0.47507424, height / duration, vehicle_name='cf' + str(individual)).join()
 
     def land(self, height=0.1, duration=2, group=0, individual=0, group_mask=0):
         """Broadcasted landing - fly straight down. User must cut power after.
@@ -186,8 +186,9 @@ class Console:
                 for drone in self.sim_list:
                     target = goal + self.position(drone)[0]
                     velocity = dis / duration
-                    target = self.position_enu_to_ned(target) - self.init_position[drone]
-                    c=self.sim_server.moveToPositionAsync(target[0], target[1], target[2], velocity, vehicle_name=drone)
+                    target -= self.init_position[drone]
+                    target = self.position_enu_to_ned(target)
+                    c = self.sim_server.moveToPositionAsync(target[0], target[1], target[2] - 0.47507424, velocity, vehicle_name=drone)
                 rate = rospy.Rate(0.2)
                 rate.sleep()
                    # c.join()
@@ -204,9 +205,11 @@ class Console:
                     goal += self.position(individual)[0]
                 dis = distance.euclidean(goal, self.position(individual)[0])
                 velocity = dis / duration
-                goal = self.position_enu_to_ned(goal) - self.init_position['cf'+str(individual)]
-                self.sim_server.moveToPositionAsync(goal[0], goal[1], goal[2], velocity,
+                goal -= self.init_position['cf'+str(individual)][0]
+                goal = self.position_enu_to_ned(goal)
+                return self.sim_server.moveToPositionAsync(goal[0], goal[1], goal[2] - 0.47507424, velocity,
                                                     vehicle_name='cf' + str(individual))
+        return None
 
 
     def publish_pcl(self, r=10, flagHaveColor=True, colorMaxDist=None):
